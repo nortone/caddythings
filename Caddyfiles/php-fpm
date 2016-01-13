@@ -4,8 +4,4 @@ root /opt/caddywww
 gzip
 log /var/log/caddyaccess.log
 errors /var/log/caddyerror.log
-fastcgi / /var/run/php5-fpm.sock {
-	ext 	.php
-	split	.php
-	index	index.php
-}
+fastcgi / /var/run/php5-fpm.sock php
