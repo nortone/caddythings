@@ -1,0 +1,70 @@
+#!/bin/bash
+#
+#
+# caddy init script
+#
+#
+
+
+CADDY='/opt/caddy-server/caddy' 
+CADDYFILE='/etc/Caddyfile'
+CAT=`which cat`
+GREP=`which grep`
+PS=`which ps`
+RM=`which rm`
+PIDS=`ps aux |grep caddy|grep -v grep|awk '{ print $2 }'`
+TITLE="Caddy Web Server"
+
+start () {
+	PIDS=`ps aux |grep $CADDY|grep -v grep|awk '{ print $2 }'`
+	if [ -z "$PIDS" ] ; then
+		echo -n "Starting $TITLE..."
+		$CADDY -conf="$CADDYFILE" -quiet=true &
+		echo "done."
+	else 
+		echo "$TITLE is already running on:"
+		echo $PIDS
+	fi
+}
+
+stop () {
+	PIDS=`ps aux |grep $CADDY|grep -v grep|awk '{ print $2 }'|sort -r`
+	if [ -z "$PIDS" ] ; then
+		echo "$TITLE is NOT running..."
+	else 
+		echo -n "Shutting down $TITLE..."
+		kill $PIDS
+		$RM -f $PID
+		echo "done."
+	fi
+}
+
+status () {
+	PIDS=`ps aux |grep $CADDY|grep -v grep|awk '{ print $2 }'`
+	if [ -z "$PIDS" ] ; then
+		echo "$TITLE is NOT running..."
+	else
+		echo "$TITLE is running on the following pids:"
+		echo $PIDS
+	fi
+}
+
+# See how we were called.
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  status)
+        status
+        ;;
+  restart)
+        stop
+        start
+        ;;
+  *)
+        echo $"Usage: $prog {start|stop|restart|status}"
+        exit 1
+esac

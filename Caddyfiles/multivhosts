@@ -1,0 +1,11 @@
+myfirstsite.com:80 {
+     root /www/myfirstsite.com
+     gzip
+     tls off
+}
+
+mysecondsite.com:80 {
+    root /www/mysecondsite.com
+    gzip
+    tls off
+}
